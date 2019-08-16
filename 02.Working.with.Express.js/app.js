@@ -13,6 +13,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     console.log('in another middleware!');
     // ..... Handling response 
+    res.send('<h1>Hello World!</h1><h2>Gazouly</h2>');
 });
 
 const server = http.createServer(app);
