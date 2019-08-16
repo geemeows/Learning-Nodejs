@@ -1,21 +1,21 @@
 const http = require('http');
+const port = 3000;
 
 const express = require('express');
 
 const app = express();
 
-// Using middlewares
 app.use((req, res, next) => {
-    console.log('in the middleware!');
+    console.log('This middleware always runs!!');
     next();
 });
 
-app.use((req, res, next) => {
-    console.log('in another middleware!');
-    // ..... Handling response 
-    res.send('<h1>Hello World!</h1><h2>Gazouly</h2>');
+app.use('/add-product', (req, res, next) => {
+    res.send('<h1>Add Product Page</h1>');
 });
 
-const server = http.createServer(app);
+app.use('/', (req, res, next) => {
+    res.send('<h1>Home Page</h1>');
+});
 
-server.listen(3000);
+app.listen(port, () => console.log(`Listening to port: ${port}.....`));
