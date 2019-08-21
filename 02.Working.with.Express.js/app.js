@@ -10,7 +10,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(adminRoutes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
@@ -18,4 +18,6 @@ app.use((req, res, next) => {
 });
 
 
-app.listen(port, () => console.log(`Listening to port: ${port}.....`));
+app.listen(port, 
+    () => console.log(`Listening to port: ${port}.....`),
+    () => console.log('http://localhost:3000'));
