@@ -7,7 +7,7 @@ class Product  {
     this.price = price;
     this.imageUrl = imageUrl;
     this.description = description;
-    this._id = id;
+    this._id = (id? new mongodb.ObjectID(id) : null);
   }
 
   save() {
@@ -18,7 +18,7 @@ class Product  {
       // Update Product
       dbOp = DB
             .collection('products')
-            .updateOne({ _id: new mongodb.ObjectID(this._id) }, { $set: this }); 
+            .updateOne({ _id: this._id }, { $set: this }); 
     } else {
       // Create New Product
       dbOp = DB
@@ -56,28 +56,17 @@ class Product  {
               })
               .catch(err => console.log(err));
   }
+
+  static deleteByID(id) {
+    const DB = getDB();
+    return DB.collection('products')
+              .deleteOne({
+                _id: new mongodb.ObjectID(id) 
+              })
+              .then(res => {
+                console.log('Deleted!');
+              })
+              .catch(err => console.log(err));
+  }           
 }
-
-// const Product = sequelize.define('product', {
-//   id: {
-//     type: Sequelize.INTEGER,
-//     autoIncrement: true,
-//     allowNull: false,
-//     primaryKey: true
-//   },
-//   title: Sequelize.STRING,
-//   price: {
-//     type: Sequelize.DOUBLE,
-//     allowNull: false
-//   },
-//   imageUrl: {
-//     type: Sequelize.STRING,
-//     allowNull: false
-//   },
-//   description: {
-//     type: Sequelize.STRING,
-//     allowNull: false
-//   }
-// });
-
 module.exports = Product;
