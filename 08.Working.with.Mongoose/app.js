@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
-// const User = require('./models/user');
+const User = require('./models/user');
 
 const app = express();
 
@@ -18,14 +18,14 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//   User.findById('5baa2528563f16379fc8a610')
-//     .then(user => {
-//       req.user = new User(user.name, user.email, user.cart, user._id);
-//       next();
-//     })
-//     .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById('5d72a41e0e009e29908a543d')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -37,8 +37,21 @@ mongoose
     'mongodb+srv://Gazouly:k422UI8lbdkjPl4v@cluster0-ml4p7.mongodb.net/shop?retryWrites=true&w=majority'
   )
   .then(result => {
+    User.findOne()
+      .then(user => {
+        if (!user) {
+          const user = new User({
+            name: 'Gazouly',
+            email: 'Gazouly@test.com',
+            cart: {
+              items: []
+            }
+          });
+          user.save();
+        }
+      })
+      .catch(err => console.log(err));
     app.listen(3000, () => {
-      
       console.log('Listening to port 3000 ....');
       console.log('http://localhost:3000');
     });
